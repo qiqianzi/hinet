@@ -1,0 +1,91 @@
+<!--/var/www/html/vue/hinet/vue/active.html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>激活页面</title>
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+
+  <style>
+    body {
+      background: ghostwhite;
+    }
+    #jhz
+    {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+      margin-top: 200px;
+      font: 38px 微软雅黑;
+      color: lightskyblue;
+    }
+  </style>
+  <script type="application/javascript">
+    function getQuery(key)
+    {
+      var query = window.location.search.substr(1).split('&')
+      for(var i = 0; i < query.length; i++)
+      {
+
+        var key_v = query[i].split('=')
+        if(key_v.length === 2)
+        {
+          if(decodeURIComponent(key_v[0]) === key)
+          {
+            return decodeURIComponent(key_v[1])
+          }
+        }
+      }
+
+    }
+
+    $(function ()
+    {
+//      var Token=getQuery('token')
+//
+//      this.$http.post('/api/v1/user/activate', Token, {emulateJSON: true}).then((res) => {
+//        if (res.body.code === 1) {
+//          alert("您已成功激活,为您返回到登录页面……")
+//          window.location = './src/views/login/login.vue'
+//        } else {
+//          console.log("Error")
+//        }
+//      })
+
+      var token=getQuery('token')
+
+      $.ajax
+      ({
+        url: "/api/v1/user/activate",
+        data: {
+          Token:token
+        },
+        dataType: 'json',
+        method: 'POST',
+        success: function (response)
+        {
+          if (response.code === 1) {
+            alert("您已成功激活,为您返回到登录页面……")
+//            window.location = 'login.html';
+//            window.location = './src/views/login/login.vue'
+           this.$route.push('./src/views/login/login.vue')
+          } else if (response.code === 0){
+            alert("activate error")
+          }
+        },
+        error: function () {
+          console.log("Error")
+        }
+      })
+
+
+    })
+
+  </script>
+
+</head>
+<body>
+<div id="jhz">激活中……</div>
+<!--<div id="to">invalid token!</div>-->
+</body>
+</html>
